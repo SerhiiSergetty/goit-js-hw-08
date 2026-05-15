@@ -66,14 +66,14 @@ const images = [
 
 const galleryContainer = document.querySelector(".gallery"); // Знаходимо список в HTML
 const galleryMarkup = images
-  .map((image) => {
+  .map(({ preview, original, description }) => {
     return `<li class="gallery-item">
-      <a class="gallery-link" href="${image.original}">
+      <a class="gallery-link" href="${original}">
         <img
           class="gallery-image"
-          src="${image.preview}"
-          data-source="${image.original}"
-          alt="${image.description}"
+          src="${preview}"
+          data-source="${original}"
+          alt="${description}"
         />
       </a>
     </li>`;
@@ -86,11 +86,27 @@ galleryContainer.addEventListener("click", (event) => {
     return;
   }
   console.log("Клікнули по:", event.target);
+
   const largeImageURL = event.target.dataset.source;
   console.log(largeImageURL);
 
-  const instance = basicLightbox.create(`
-    <img src="${largeImageURL}" width="800" height="600">
-`);
+  // 1. Створюємо інстанс. Зверни увагу на кому після рядка з img!
+  const instance = basicLightbox.create(
+    `<img src="${largeImageURL}" width="1128">`,
+    {
+      onShow: (instance) => {
+        window.addEventListener("keydown", onEscKeyPress);
+      },
+      onClose: (instance) => {
+        window.removeEventListener("keydown", onEscKeyPress);
+      },
+    },
+  );
+  // Функція обробки натискання клавіші
+  function onEscKeyPress(event) {
+    if (event.code === "Escape") {
+      instance.close();
+    }
+  }
   instance.show();
 });
