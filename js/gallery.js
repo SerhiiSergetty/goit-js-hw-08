@@ -95,10 +95,10 @@ galleryContainer.addEventListener("click", (event) => {
     `<img src="${largeImageURL}" width="1128">`,
     {
       onShow: (instance) => {
-        window.addEventListener("keydown", onEscKeyPress);
+        document.addEventListener("keydown", onEscKeyPress); //Додаємо кнопку esc до моменту натискання
       },
       onClose: (instance) => {
-        window.removeEventListener("keydown", onEscKeyPress);
+        document.removeEventListener("keydown", onEscKeyPress); // Тут кнопка esc видаляється після натискання
       },
     },
   );
